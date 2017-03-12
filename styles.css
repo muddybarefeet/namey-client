@@ -1,7 +1,13 @@
+body { margin:0; /* This is used to reset any browser-default margins */ }
 
 html {
   font-size: 80%;
 }
+/*
+@font-face {
+  font-family: turtleDoves;
+  src: url(fonts/2TurtleDoves/DOVES.TTF);
+}*/
 
 .animBlock {
   display: block;
@@ -17,15 +23,20 @@ html {
 .animBlock[data-position="left"] { left: -20%; }
 .animBlock[data-position="right"] { right: -20%; }
 
-.animBlock[data-position="left"].viewed {
+.animBlock[data-position="left"].view {
   left: 0%;
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.animBlock[data-position="right"].viewed {
+.animBlock[data-position="right"].view {
   right: 0%;
   opacity: 1;
   filter: alpha(opacity=100);
+}
+
+.window-height-div {
+    height:100vh;
+    background-image: url('https://image.freepik.com/free-vector/grey-linen-texture-background_1053-253.jpg');
 }
 
 h4 {

@@ -1,5 +1,5 @@
 $(function() {
-  // var $blocks = $('.animBlock.notViewed');
+
   var $window = $(window);
 
   function isScrolledIntoView(elem) {
@@ -7,35 +7,30 @@ $(function() {
     var docViewTop = $(window).scrollTop();
     var docViewBottom = docViewTop + $(window).height();
 
-    var elemOffset = 0;
-    
-    if(elem.data('offset') !== undefined) {
-      elemOffset = elem.data('offset');
-    }
-
     //check where the current element is on the page and its full height
     var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();
-    
-    if(elemOffset !== 0) { // custom offset is updated based on scrolling direction
-      if(docViewTop - elemTop >= 0) {
-        // scrolling up from bottom
-        elemTop = $(elem).offset().top + elemOffset;
-      } else {
-        // scrolling down from top
-        elemBottom = elemTop + $(elem).height() - elemOffset;
-      }
-    }
 
+    // If the element is in view
     if((elemBottom <= docViewBottom) && (elemTop >= docViewTop)) {
-      // once an element is visible exchange the classes
-      $(elem).removeClass('notViewed').addClass('viewed');
+      // once an element is visible give it a viewed class
+      $(elem).removeClass('notViewed').addClass('view');
+
+      // If the element is above the view
+    } else if((elemBottom <= docViewTop) && (elemTop < docViewTop)) {
+      $(elem).removeClass('view').addClass('notViewed');
+
+      // If the element is lower than the view
+    } else if((elemBottom > docViewBottom) && (elemTop > docViewBottom)) {
+      // once an element is visible give it a viewed class
+      $(elem).removeClass('view').addClass('notViewed');
       
-      var animElemsLeft = $('.animBlock.notViewed').length;
-      if(animElemsLeft === 0){
-        // with no animated elements left debind the scroll event
-        $(window).off('scroll');
-      }
+    }
+    
+    var animElemsLeft = $('.animBlock.notViewed').length;
+    if(animElemsLeft === 0){
+      // with no animated elements left debind the scroll event
+      $(window).off('scroll');
     }
   }
 
@@ -78,7 +73,10 @@ $(function() {
 
   var fontClasses = ['pangolin', 'barrio', 'amatic', 'bahina', 'droid', 'cinzel', 'sigmar', 'pinyon'];
 
+  // Logic for putting the names on the page
+
   var previousDirection = "left";
+  // Add items to the page but not as visible
   girls.forEach(function(name, index) {
     var randomFont = fontClasses[Math.floor(Math.random()*fontClasses.length)];
     var elem = '<div id="devices" data-position="'+ previousDirection +'" class="notViewed animBlock floatl '+randomFont+'"><h4 id='+ index +' style="line-height: 250%">'+ name +'</h4></div>';
@@ -87,16 +85,12 @@ $(function() {
     previousDirection = previousDirection === "left" ? "right" : "left";
   });
 
+  // on scroll display them
   $window.on('scroll', function(e){
-    var $blocks = $('.animBlock.notViewed');
+    var $blocks = $('.animBlock');
     $blocks.each(function(i,elem){
-      if($(this).hasClass('viewed')) {
-        return;
-      }
       isScrolledIntoView($(this));
     });
-    console.log('scroll');
-    
   });
 
 });
